@@ -5,14 +5,14 @@ ADD_DATE_TO_FILENAME=""
 
 usage() {
     cat <<EOL
-    Usage: $0 [OPTIONS] <source_dir> <backup_name>
-    Options:
-        -v              : Verbose mode.
-        --date <format> : Add date to the backup filename.
-                          Supported formats: time, date, datetime, timestamp
-    EOL
-}
+Usage: $0 [OPTIONS] <source_dir> <backup_name>
+Options:
+    -v              : Verbose mode.
+    --date <format> : Add date to the backup filename.
+                      Supported formats: time, date, datetime, timestamp
 
+EOL
+}
 
 if [[ $# -lt 2 ]]; then
     usage
@@ -52,7 +52,6 @@ while true; do
     esac
 done
 
-
 if [[ $# -ne 2 ]]; then
     usage
     exit 1
@@ -68,7 +67,6 @@ if [[ "$2" != *.tar.gz ]]; then
     exit 1
 fi
 
-
 if [[ $VERBOSE_OUTPUT -eq 0 ]]; then
     if [[ $ADD_DATE_TO_FILENAME == "" ]]; then
         tar -zcf $2 $1 &> /dev/null
@@ -83,10 +81,7 @@ else
     fi
 fi
 
-
 if [[ ! -f "$2" ]]; then
     echo "ERROR: Could not create the backup file."
     exit 1
 fi
-
-echo "INFO: Backup is created successfully."
