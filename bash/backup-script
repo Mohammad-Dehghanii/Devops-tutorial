@@ -68,3 +68,17 @@ if [[ "$2" != *.tar.gz ]]; then
     exit 1
 fi
 
+
+if [[ $VERBOSE_OUTPUT -eq 0 ]]; then
+    if [[ $ADD_DATE_TO_FILENAME == "" ]]; then
+        tar -zcf $2 $1 &> /dev/null
+    else
+        tar -zcf "${ADD_DATE_TO_FILENAME}-${2}" $1 &> /dev/null
+    fi
+else
+    if [[ $ADD_DATE_TO_FILENAME == "" ]]; then
+        tar -zvcf $2 $1
+    else
+        tar -zvcf "${ADD_DATE_TO_FILENAME}-${2}" $1
+    fi
+fi
