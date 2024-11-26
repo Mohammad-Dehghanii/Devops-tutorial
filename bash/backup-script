@@ -12,3 +12,10 @@ usage() {
                           Supported formats: time, date, datetime, timestamp
     EOL
 }
+
+
+if [[ $# -lt 2 ]]; then
+    usage
+    exit 1
+fi
+
