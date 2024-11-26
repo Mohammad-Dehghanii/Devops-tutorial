@@ -19,3 +19,35 @@ if [[ $# -lt 2 ]]; then
     exit 1
 fi
 
+while true; do
+    case $1 in
+        -v)
+            VERBOSE_OUTPUT=1
+            shift 1
+            ;;
+        --date)
+            case $2 in
+                time)
+                    ADD_DATE_TO_FILENAME=$(date +%H%M%S)
+                    ;;
+                date)
+                    ADD_DATE_TO_FILENAME=$(date +%Y%m%d)
+                    ;;
+                datetime)
+                    ADD_DATE_TO_FILENAME=$(date +%Y%m%d-%H%M%S)
+                    ;;
+                timestamp)
+                    ADD_DATE_TO_FILENAME=$(date +%s)
+                    ;;
+                *)
+                    echo "ERROR: Unsupported date format."
+                    exit 1
+                    ;;
+            esac
+            shift 2
+            ;;
+        *)
+            break
+            ;;
+    esac
+done
