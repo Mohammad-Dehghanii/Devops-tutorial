@@ -82,3 +82,11 @@ else
         tar -zvcf "${ADD_DATE_TO_FILENAME}-${2}" $1
     fi
 fi
+
+
+if [[ ! -f "$2" ]]; then
+    echo "ERROR: Could not create the backup file."
+    exit 1
+fi
+
+echo "INFO: Backup is created successfully."
