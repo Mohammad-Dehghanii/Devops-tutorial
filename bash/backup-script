@@ -2,3 +2,13 @@
 
 VERBOSE_OUTPUT=0
 ADD_DATE_TO_FILENAME=""
+
+usage() {
+    cat <<EOL
+    Usage: $0 [OPTIONS] <source_dir> <backup_name>
+    Options:
+        -v              : Verbose mode.
+        --date <format> : Add date to the backup filename.
+                          Supported formats: time, date, datetime, timestamp
+    EOL
+}
