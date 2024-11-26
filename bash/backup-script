@@ -1,8 +1,14 @@
 #!/usr/bin/bash
 
-VERBOSE_OUTPUT=0
-ADD_DATE_TO_FILENAME=""
+# Backup Script
+# This script compresses a given directory into a tar.gz archive file.
+# It supports adding timestamps or dates to the filename and verbose output.
 
+VERBOSE_OUTPUT=0                  # Flag for verbose output (default: disabled).
+ADD_DATE_TO_FILENAME=""           # Variable to store date format for the filename.
+
+# Function: usage
+# Displays usage information for the script.
 usage() {
     cat <<EOL
 Usage: $0 [OPTIONS] <source_dir> <backup_name>
@@ -10,78 +16,87 @@ Options:
     -v              : Verbose mode.
     --date <format> : Add date to the backup filename.
                       Supported formats: time, date, datetime, timestamp
-
 EOL
 }
 
+# Check if the required arguments are provided.
 if [[ $# -lt 2 ]]; then
     usage
     exit 1
 fi
 
+# Parse command-line options.
 while true; do
     case $1 in
-        -v)
+        -v) # Enable verbose mode.
             VERBOSE_OUTPUT=1
             shift 1
             ;;
-        --date)
+        --date) # Process the date option and format.
             case $2 in
-                time)
+                time)      # Add current time (HHMMSS) to the filename.
                     ADD_DATE_TO_FILENAME=$(date +%H%M%S)
                     ;;
-                date)
+                date)      # Add current date (YYYYMMDD) to the filename.
                     ADD_DATE_TO_FILENAME=$(date +%Y%m%d)
                     ;;
-                datetime)
+                datetime)  # Add current date and time (YYYYMMDD-HHMMSS) to the filename.
                     ADD_DATE_TO_FILENAME=$(date +%Y%m%d-%H%M%S)
                     ;;
-                timestamp)
+                timestamp) # Add Unix timestamp to the filename.
                     ADD_DATE_TO_FILENAME=$(date +%s)
                     ;;
-                *)
+                *) # Handle invalid date formats.
                     echo "ERROR: Unsupported date format."
                     exit 1
                     ;;
             esac
             shift 2
             ;;
-        *)
+        *) # Break the loop when no more options are found.
             break
             ;;
     esac
 done
 
+# Validate the number of remaining arguments (must be exactly 2).
 if [[ $# -ne 2 ]]; then
     usage
     exit 1
 fi
 
+# Validate the source directory.
 if [[ ! -d "$1" ]]; then
     echo "ERROR: $1 should be a directory."
     exit 1
 fi
 
+# Validate the backup filename extension.
 if [[ "$2" != *.tar.gz ]]; then
     echo "ERROR: $2 should be something with .tar.gz extension."
     exit 1
 fi
 
+# Perform the backup based on verbosity and date options.
 if [[ $VERBOSE_OUTPUT -eq 0 ]]; then
     if [[ $ADD_DATE_TO_FILENAME == "" ]]; then
-        tar -zcf $2 $1 &> /dev/null
+        tar -zcf $2 $1 &> /dev/null # Create the archive silently.
     else
-        tar -zcf "${ADD_DATE_TO_FILENAME}-${2}" $1 &> /dev/null
+        tar -zcf "${ADD_DATE_TO_FILENAME}-${2}" $1 &> /dev/null # Add date to filename.
     fi
 else
     if [[ $ADD_DATE_TO_FILENAME == "" ]]; then
-        tar -zvcf $2 $1
+        tar -zvcf $2 $1 # Create the archive with verbose output.
     else
-        tar -zvcf "${ADD_DATE_TO_FILENAME}-${2}" $1
+        tar -zvcf "${ADD_DATE_TO_FILENAME}-${2}" $1 # Add date to filename with verbose output.
     fi
 fi
 
+# Verify if the archive file was successfully created.
 if [[ ! -f "$2" ]]; then
     echo "ERROR: Could not create the backup file."
     exit 1
 fi
+
+# Print success message.
+echo "INFO: Backup is created successfully."
