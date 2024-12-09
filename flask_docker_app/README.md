@@ -1,6 +1,7 @@
 # Flask Docker App
 
-This is a simple Flask application containerized using Docker. It supports Docker Compose for easier container management.
+This is a simple Flask application containerized using Docker.
+It supports Docker Compose for easier container management.
 
 ## Features
 - Flask-based REST API
